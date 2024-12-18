@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "30900359317",
+    "project_id": "coffeeshopnotifications",
+    "storage_bucket": "coffeeshopnotifications.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30900359317:android:e309ca0468d4402b3c4b9c",
+        "android_client_info": {
+          "package_name": "com.coffeeshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8u3ZycHumnw4bYJWhGV5OpQdgGM9goOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
