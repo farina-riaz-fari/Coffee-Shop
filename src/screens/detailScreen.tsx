@@ -28,7 +28,7 @@ const DetailScreen = () => {
   });
 
   const {favourites, toggleFavourite} = useFavourites();
-  const isFavourites = favourites.some(fav => fav.id === item.id);
+  const isFavourites = favourites.some(fav => fav?.id === item?.id);
 
   const [openModal, setOpenModal] = useState(false);
   const [openBuyNowModal, setOpenBuyNowModal] = useState(false);
@@ -37,11 +37,11 @@ const DetailScreen = () => {
   const sizes = ['S', 'M', 'L'];
   const getPrice = () => {
     if (activeTab === 0) {
-      return item.price.toFixed(2);
+      return item?.price.toFixed(2);
     } else if (activeTab === 1) {
-      return (item.price * 1.1).toFixed(2);
+      return (item?.price * 1.1).toFixed(2);
     } else if (activeTab === 2) {
-      return (item.price * 1.2).toFixed(2);
+      return (item?.price * 1.2).toFixed(2);
     }
   };
   const totalPrice = getPrice();
@@ -58,7 +58,7 @@ const DetailScreen = () => {
   };
 
   const matchingImages =
-    sliderImages.find(slider => slider.name === item?.name)?.image || [];
+    sliderImages.find(slider => slider?.name === item?.name)?.image || [];
 
   return (
     <>
@@ -92,11 +92,11 @@ const DetailScreen = () => {
               style={{borderRadius: 16}}
             />
           </View>
-          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.title}>{item?.name}</Text>
           <View style={styles.detail}>
             <Text style={styles.text1}>Choose More</Text>
             <View style={styles.options}>
-              {icons.map((value, index) => (
+              {icons?.map((value, index) => (
                 <View style={styles.iconContainer} key={index}>
                   <TouchableOpacity onPress={() => handleIconPress(value)}>
                     <Image source={value?.image} style={styles.icons} />
@@ -110,8 +110,8 @@ const DetailScreen = () => {
             <Text style={styles.desTitle}>Description</Text>
             <Text style={styles.description}>
               {onShowMore
-                ? item.description
-                : `${item.description.slice(0, 100)}...`}
+                ? item?.description
+                : `${item?.description.slice(0, 100)}...`}
             </Text>
             {item?.description?.length > 100 && (
               <TouchableOpacity
@@ -126,7 +126,7 @@ const DetailScreen = () => {
           <View style={{marginBottom: 30}}>
             <Text style={styles.desTitle}>Size</Text>
             <View style={styles.btnStyle}>
-              {sizes.map((size, index) => (
+              {sizes?.map((size, index) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => handleSizeSelection(index)}>
