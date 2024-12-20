@@ -30,7 +30,7 @@ export const CardsData = [
     name: 'Macchiato',
     price: 2.3,
     description:
-      "The caffè macchiato has the highest ratio of espresso to milk of any drink made with those ingredients. The intent is that the milk moderates, rather than overwhelms, the taste of the coffee while adding a touch of sweetness. The drink is typically prepared by pouring a small amount of steamed milk directly into a single shot of espresso.[4] One recipe calls for 5-10 g (1-2 teaspoons) of milk heated to 60-66 °C (140-150 °F).",
+      'The caffè macchiato has the highest ratio of espresso to milk of any drink made with those ingredients. The intent is that the milk moderates, rather than overwhelms, the taste of the coffee while adding a touch of sweetness. The drink is typically prepared by pouring a small amount of steamed milk directly into a single shot of espresso.[4] One recipe calls for 5-10 g (1-2 teaspoons) of milk heated to 60-66 °C (140-150 °F).',
   },
   {
     id: 5,
@@ -81,12 +81,59 @@ export const Icons = [
   {title: 'sugar', image: require('../assets/sugar.png')},
 ];
 
-
 export const sliderImages = [
-  {name: 'Cappuccino', image: [require('../assets/cap1.jpeg'), require('../assets/cap2.jpeg'), require('../assets/cap3.jpeg'), require('../assets/cap4.jpeg')]},
-  {name: 'Flat White', image: [require('../assets/fw1.jpeg'), require('../assets/fw2.jpeg'), require('../assets/fw3.jpeg'), require('../assets/fw4.jpeg')]},
-  {name: 'Caffe Mocha', image: [require('../assets/mo1.jpeg'), require('../assets/mo2.jpeg'), require('../assets/mo3.jpeg'), require('../assets/mo4.jpeg')]},
-  {name: 'Macchiato', image: [require('../assets/mac1.jpeg'), require('../assets/mac2.jpeg'), require('../assets/mac3.jpeg'), require('../assets/mac4.jpeg')]},
-  {name: 'Americano', image: [require('../assets/amer1.jpeg'), require('../assets/amer2.jpeg'), require('../assets/amer3.jpeg'), require('../assets/amer4.jpeg')]},
-  {name: 'Latte', image: [require('../assets/lat1.jpeg'), require('../assets/lat2.jpeg'), require('../assets/lat3.jpeg'), require('../assets/lat4.jpeg')]},
+  {
+    name: 'Cappuccino',
+    image: [
+      require('../assets/cap1.jpeg'),
+      require('../assets/cap2.jpeg'),
+      require('../assets/cap3.jpeg'),
+      require('../assets/cap4.jpeg'),
+    ],
+  },
+  {
+    name: 'Flat White',
+    image: [
+      require('../assets/fw1.jpeg'),
+      require('../assets/fw2.jpeg'),
+      require('../assets/fw3.jpeg'),
+      require('../assets/fw4.jpeg'),
+    ],
+  },
+  {
+    name: 'Caffe Mocha',
+    image: [
+      require('../assets/mo1.jpeg'),
+      require('../assets/mo2.jpeg'),
+      require('../assets/mo3.jpeg'),
+      require('../assets/mo4.jpeg'),
+    ],
+  },
+  {
+    name: 'Macchiato',
+    image: [
+      require('../assets/mac1.jpeg'),
+      require('../assets/mac2.jpeg'),
+      require('../assets/mac3.jpeg'),
+      require('../assets/mac4.jpeg'),
+    ],
+  },
+  {
+    name: 'Americano',
+    image: [
+      require('../assets/amer1.jpeg'),
+      require('../assets/amer2.jpeg'),
+      require('../assets/amer3.jpeg'),
+      require('../assets/amer4.jpeg'),
+    ],
+  },
+  {
+    name: 'Latte',
+    image: [
+      require('../assets/lat1.jpeg'),
+      require('../assets/lat2.jpeg'),
+      require('../assets/lat3.jpeg'),
+      require('../assets/lat4.jpeg'),
+    ],
+  },
 ];

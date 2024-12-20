@@ -1,10 +1,18 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import BottomTab from '../components/BottomTabs';
 import {useNotifications} from '../Context/NotificationsContext';
 
 const Notifications = () => {
   const {notifications} = useNotifications();
+  // const {notifications, removeNotification} = useNotifications();
 
   const renderNotification = ({item}) => (
     <View style={styles.notificationCard}>
@@ -21,6 +29,12 @@ const Notifications = () => {
       <Text style={styles.timestamp}>
         {new Date(item.timestamp).toLocaleString()}
       </Text>
+      {/* <TouchableOpacity
+      style={styles.deleteButton}
+      onPress={() => removeNotification(item.timestamp)}
+    >
+      <Image style={styles.image} source={require('../assets/close.png')}/>
+    </TouchableOpacity> */}
     </View>
   );
 
@@ -53,7 +67,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    paddingBottom: 10,
   },
   placeholder: {
     fontSize: 16,
@@ -76,6 +90,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    marginTop: 10,
   },
   title: {
     fontSize: 16,
@@ -101,6 +116,13 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  // deleteButton: {
+  //   backgroundColor: "#C67C4E",
+  //   borderRadius: 20,
+  //   position: "absolute",
+  //   right: -6,
+  //   top: -6,
+  // },
 });
 
 export default Notifications;

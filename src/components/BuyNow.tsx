@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import notifee from '@notifee/react-native';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
-import { useNotifications } from '../Context/NotificationsContext';
+import {useNotifications} from '../Context/NotificationsContext';
 import Toast from 'react-native-toast-message';
 
 interface BuyNowProps {
@@ -38,7 +38,7 @@ const BuyNow: React.FC<BuyNowProps> = ({
   const handleQuantityDecrement = () => {
     setQuantity(quantity > 1 ? quantity - 1 : 1);
   };
-  const { addNotification } = useNotifications();
+  const {addNotification} = useNotifications();
 
   const deliveryCharges =
     selectedType.bike === 'Pick Up' ? (0.0).toFixed(2) : (0.5).toFixed(2);
@@ -84,11 +84,11 @@ const BuyNow: React.FC<BuyNowProps> = ({
     Toast.show({
       type: 'success',
       text1: 'Success',
-      text2: 'Order Placed successfully! 👋'
+      text2: 'Order Placed successfully! 👋',
     });
-  }
+  };
 
-  const onDisplayNotification = async ({ title, body }) => {
+  const onDisplayNotification = async ({title, body}) => {
     try {
       const settings = await notifee.requestPermission();
       if (settings.authorizationStatus === 1) {
@@ -102,11 +102,11 @@ const BuyNow: React.FC<BuyNowProps> = ({
           body,
           android: {
             channelId,
-            pressAction: { id: 'default' },
+            pressAction: {id: 'default'},
           },
         });
 
-        addNotification({ title, body, timestamp: new Date().toISOString() });
+        addNotification({title, body, timestamp: new Date().toISOString()});
       }
     } catch (error) {
       console.error('Error displaying notification:', error);
@@ -172,7 +172,15 @@ const BuyNow: React.FC<BuyNowProps> = ({
           <Text style={styles.billingTotal}>Total:</Text>
           <Text style={styles.optionRightText}>${total.toFixed(2)}</Text>
         </View>
-        <TouchableOpacity style={styles.payBtn} onPress={() => {onDisplayNotification({title: "Success", body: "Order Placed successfully!"}), handlePayment()}}>
+        <TouchableOpacity
+          style={styles.payBtn}
+          onPress={() => {
+            onDisplayNotification({
+              title: 'Success',
+              body: 'Order Placed successfully!',
+            }),
+              handlePayment();
+          }}>
           <Text style={styles.payText}>Pay</Text>
         </TouchableOpacity>
       </SafeAreaView>

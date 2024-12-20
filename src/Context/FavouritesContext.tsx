@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FavouritesContext = createContext();
 
-export const FavouritesProvider = ({ children }) => {
+export const FavouritesProvider = ({children}) => {
   const [favourites, setFavourites] = useState([]);
 
   useEffect(() => {
@@ -20,23 +20,26 @@ export const FavouritesProvider = ({ children }) => {
     loadFavourites();
   }, []);
 
-  const toggleFavourite = async (item) => {
-    const isFavourite = favourites.some((fav) => fav.id === item.id);
+  const toggleFavourite = async item => {
+    const isFavourite = favourites.some(fav => fav.id === item.id);
     const updatedFavourites = isFavourite
-      ? favourites.filter((fav) => fav.id !== item.id)
+      ? favourites.filter(fav => fav.id !== item.id)
       : [...favourites, item];
 
     setFavourites(updatedFavourites);
 
     try {
-      await AsyncStorage.setItem('favourites', JSON.stringify(updatedFavourites));
+      await AsyncStorage.setItem(
+        'favourites',
+        JSON.stringify(updatedFavourites),
+      );
     } catch (error) {
       console.error('Failed to save favourites:', error);
     }
   };
 
   return (
-    <FavouritesContext.Provider value={{ favourites, toggleFavourite }}>
+    <FavouritesContext.Provider value={{favourites, toggleFavourite}}>
       {children}
     </FavouritesContext.Provider>
   );

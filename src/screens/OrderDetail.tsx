@@ -1,31 +1,41 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const OrderDetail = () => {
-    const route = useRoute();
-    const {item} = route.params || {};
-    const navigation = useNavigation();
+  const route = useRoute();
+  const {item} = route.params || {};
+  const navigation = useNavigation();
 
-    return(
-        <SafeAreaView style={styles.container}>
-        <View style={styles.head}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={require('../assets/previous.png')} style={styles.back} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.head}>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.head}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../assets/previous.png')}
+            style={styles.back}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.head}>
         <Text style={styles.header}>Thanks for your Order!</Text>
-        </View>
-        <View style={styles.pageWrapper}>
+      </View>
+      <View style={styles.pageWrapper}>
         <Text style={styles.name}>{item?.name}</Text>
         <View style={styles.dateView}>
           <Text style={styles.dateTextHead}>Date:</Text>
           <Text style={styles.date}>{item?.timestamp}</Text>
         </View>
         <View style={styles.wrap}>
-          <Image source={item?.image} style={styles.image}/>
+          <Image source={item?.image} style={styles.image} />
           <View style={styles.content}>
-          <View style={styles.detail}>
+            <View style={styles.detail}>
               <Text style={styles.text}>Size:</Text>
               <Text style={styles.item}>{item?.size}</Text>
             </View>
@@ -36,27 +46,28 @@ const OrderDetail = () => {
           </View>
         </View>
         <View style={styles.categoryView}>
-              <Text style={styles.categoryText}>Delivery Method:</Text>
-              <Text style={styles.category}>{item?.deliveryMethod}</Text>
-            </View>
-            <View style={styles.categoryView}>
-              <Text style={styles.categoryText}>Delivery Charges:</Text>
-              <Text style={styles.category}>{item?.deliveryCharges}</Text>
-            </View>
-            <View style={styles.categoryView}>
-              <Text style={styles.categoryText}>Sugar Preference:</Text>
-              <Text style={styles.category}>{item?.sugarPreference}</Text>
-            </View>
-            <View style={{borderWidth: 0.6, borderColor: "black", marginVertical: 20}}/>
-            <View style={styles.detail}>
-              <Text style={styles.categoryText1}>Total Price:</Text>
-              <Text style={styles.categoryText1}>${item?.total}</Text>
-            </View>
+          <Text style={styles.categoryText}>Delivery Method:</Text>
+          <Text style={styles.category}>{item?.deliveryMethod}</Text>
         </View>
-
+        <View style={styles.categoryView}>
+          <Text style={styles.categoryText}>Delivery Charges:</Text>
+          <Text style={styles.category}>{item?.deliveryCharges}</Text>
+        </View>
+        <View style={styles.categoryView}>
+          <Text style={styles.categoryText}>Sugar Preference:</Text>
+          <Text style={styles.category}>{item?.sugarPreference}</Text>
+        </View>
+        <View
+          style={{borderWidth: 0.6, borderColor: 'black', marginVertical: 20}}
+        />
+        <View style={styles.detail}>
+          <Text style={styles.categoryText1}>Total Price:</Text>
+          <Text style={styles.categoryText1}>${item?.total}</Text>
+        </View>
+      </View>
     </SafeAreaView>
-    )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -75,7 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: "#C67C4E"
+    color: '#C67C4E',
   },
   back: {
     width: 30,
@@ -100,8 +111,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   wrap: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 10,
     marginBottom: 20,
   },
@@ -117,9 +128,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   dateView: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
-    alignItems: "center",
+    alignItems: 'center',
     paddingBottom: 20,
   },
   dateTextHead: {
@@ -134,12 +145,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
   },
   detail: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
   },
   text: {
@@ -155,8 +166,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   categoryView: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 20,
   },
   categoryText: {
@@ -166,9 +177,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   category: {
-    backgroundColor: "#C67C4E",
+    backgroundColor: '#C67C4E',
     borderRadius: 10,
-    color: "white",
+    color: 'white',
     fontSize: 18,
     paddingHorizontal: 20,
     paddingVertical: 5,

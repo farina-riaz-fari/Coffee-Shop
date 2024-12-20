@@ -12,7 +12,7 @@ import {Icons, sliderImages} from '../Data';
 import Modal from '../components/Modal';
 import BuyNow from '../components/BuyNow';
 import {useFavourites} from '../Context/FavouritesContext';
-import ImageSlider from "react-native-image-slider";
+import ImageSlider from 'react-native-image-slider';
 
 const DetailScreen = () => {
   const navigation = useNavigation();
@@ -57,7 +57,8 @@ const DetailScreen = () => {
     setOpenModal(true);
   };
 
-  const matchingImages = sliderImages.find(slider => slider.name === item?.name)?.image || [];
+  const matchingImages =
+    sliderImages.find(slider => slider.name === item?.name)?.image || [];
 
   return (
     <>
@@ -85,7 +86,11 @@ const DetailScreen = () => {
         </View>
         <ScrollView style={{padding: 20}}>
           <View style={styles.imageStyle}>
-          <ImageSlider images={matchingImages} autoPlayWithInterval={3000} style={{borderRadius: 16}}/>
+            <ImageSlider
+              images={matchingImages}
+              autoPlayWithInterval={3000}
+              style={{borderRadius: 16}}
+            />
           </View>
           <Text style={styles.title}>{item.name}</Text>
           <View style={styles.detail}>
@@ -197,7 +202,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   imageStyle: {
-    width: "100%",
+    width: '100%',
     height: 200,
     borderRadius: 20,
     marginBottom: 20,

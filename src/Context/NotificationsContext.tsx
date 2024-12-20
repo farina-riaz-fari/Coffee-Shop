@@ -1,9 +1,9 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, {createContext, useState, useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NotificationsContext = createContext();
 
-export const NotificationsProvider = ({ children }) => {
+export const NotificationsProvider = ({children}) => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -20,18 +20,35 @@ export const NotificationsProvider = ({ children }) => {
     loadNotifications();
   }, []);
 
-  const addNotification = async (notification) => {
+  const addNotification = async notification => {
     try {
       const updatedNotifications = [notification, ...notifications];
       setNotifications(updatedNotifications);
-      await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+      await AsyncStorage.setItem(
+        'notifications',
+        JSON.stringify(updatedNotifications),
+      );
     } catch (error) {
       console.error('Failed to add notification:', error);
     }
   };
+  // For remove notification...........
+  // const removeNotification = async (timestamp) => {
+  //   try {
+  //     const updatedNotifications = notifications.filter(
+  //       (notification) => notification.timestamp !== timestamp
+  //     );
+  //     console.log(updatedNotifications)
+  //     setNotifications(updatedNotifications);
+  //     await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+  //   } catch (error) {
+  //     console.error('Failed to remove notification:', error);
+  //   }
+  // };
 
   return (
-    <NotificationsContext.Provider value={{ notifications, addNotification }}>
+    // <NotificationsContext.Provider value={{ notifications, addNotification, removeNotification }}>
+    <NotificationsContext.Provider value={{notifications, addNotification}}>
       {children}
     </NotificationsContext.Provider>
   );
