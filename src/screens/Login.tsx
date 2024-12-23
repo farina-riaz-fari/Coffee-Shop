@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,18 +7,23 @@ import {
   StyleSheet,
   Animated,
   Image,
+  Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginSignupScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [message, setMessage] = useState('');
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const navigation = useNavigation();
   const sliderAnimation = useState(new Animated.Value(0))[0];
 
@@ -76,7 +81,7 @@ const LoginSignupScreen = () => {
   };
 
   const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword || !firstName || !lastName) {
       setMessage('All fields are required.');
       return;
     }
@@ -86,100 +91,151 @@ const LoginSignupScreen = () => {
     }
 
     try {
-      await auth().createUserWithEmailAndPassword(email, password);
+      const userCredential = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      await user.updateProfile({
+        displayName: `${firstName} ${lastName}`,
+      });
+
       setMessage('Signup successful! Please login.');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+      setFirstName('');
+      setLastName('');
       toggleForm();
     } catch (error) {
       setMessage(error.message || 'Signup failed. Please try again.');
     }
   };
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <LinearGradient colors={['#C67C4E', '#8B4513']} style={styles.wrapper}>
       <Image source={require('../assets/coffeeLogo.png')} style={styles.logo} />
-      <View style={styles.titleText}>
-        <Text style={styles.title}>
-          {isLogin ? 'Login Form' : 'Signup Form'}
-        </Text>
-      </View>
-      <View style={styles.formContainer}>
-        <View style={styles.slideControls}>
-          <TouchableOpacity
-            onPress={() => isLogin || toggleForm()}
-            style={styles.slide}>
-            <Text style={isLogin ? styles.activeSlide : styles.inactiveSlide}>
-              Login
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => !isLogin || toggleForm()}
-            style={styles.slide}>
-            <Text style={!isLogin ? styles.activeSlide : styles.inactiveSlide}>
-              Signup
-            </Text>
-          </TouchableOpacity>
-          <Animated.View style={[styles.sliderTab, {left: sliderPosition}]} />
+      <KeyboardAwareScrollView
+      style={{width: '100%'}}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: isKeyboardVisible ? 0 : 20 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.titleText}>
+          <Text style={styles.title}>
+            {isLogin ? 'Login Form' : 'Signup Form'}
+          </Text>
         </View>
-        <View style={styles.formInner}>
-          {isLogin ? (
-            <View style={styles.form}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email Address"
-                placeholderTextColor="#999"
-                onChangeText={value => setEmail(value)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999"
-                secureTextEntry
-                onChangeText={value => setPassword(value)}
-              />
-              <TouchableOpacity>
-                <Text style={styles.linkText}>Forgot password?</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-                <Text style={styles.btnText}>Login</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles.form}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email Address"
-                placeholderTextColor="#999"
-                value={email}
-                onChangeText={value => setEmail(value)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999"
-                secureTextEntry
-                value={password}
-                onChangeText={value => setPassword(value)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                placeholderTextColor="#999"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={value => setConfirmPassword(value)}
-              />
-              <TouchableOpacity style={styles.btn} onPress={handleSignUp}>
-                <Text style={styles.btnText}>Signup</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+        <View style={styles.formContainer}>
+          <View style={styles.slideControls}>
+            <TouchableOpacity
+              onPress={() => isLogin || toggleForm()}
+              style={styles.slide}>
+              <Text style={isLogin ? styles.activeSlide : styles.inactiveSlide}>
+                Login
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => !isLogin || toggleForm()}
+              style={styles.slide}>
+              <Text style={!isLogin ? styles.activeSlide : styles.inactiveSlide}>
+                Signup
+              </Text>
+            </TouchableOpacity>
+            <Animated.View style={[styles.sliderTab, { left: sliderPosition }]} />
+          </View>
+          <View style={styles.formInner}>
+            {isLogin ? (
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email Address"
+                  placeholderTextColor="#999"
+                  onChangeText={value => setEmail(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  secureTextEntry
+                  onChangeText={value => setPassword(value)}
+                />
+                <TouchableOpacity>
+                  <Text style={styles.linkText}>Forgot password?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+                  <Text style={styles.btnText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="First Name"
+                  placeholderTextColor="#999"
+                  value={firstName}
+                  onChangeText={value => setFirstName(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Last Name"
+                  placeholderTextColor="#999"
+                  value={lastName}
+                  onChangeText={value => setLastName(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email Address"
+                  placeholderTextColor="#999"
+                  value={email}
+                  onChangeText={value => setEmail(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={value => setPassword(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#999"
+                  secureTextEntry
+                  value={confirmPassword}
+                  onChangeText={value => setConfirmPassword(value)}
+                />
+                <TouchableOpacity style={styles.btn} onPress={handleSignUp}>
+                  <Text style={styles.btnText}>Signup</Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
-          {message ? <Text style={styles.message}>{message}</Text> : null}
+            {message ? <Text style={styles.message}>{message}</Text> : null}
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </LinearGradient>
   );
 };
@@ -213,6 +269,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     elevation: 5,
     paddingVertical: 30,
+
   },
   slideControls: {
     flexDirection: 'row',

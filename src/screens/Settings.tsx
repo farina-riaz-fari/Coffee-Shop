@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,18 +12,33 @@ import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
 const Settings = () => {
-    const navigation = useNavigation();
-    const [logout, setLogout] = useState(false);
+  const navigation = useNavigation();
+  const [profile, setProfile] = useState(false);
+  const [logout, setLogout] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
-    const handleLogout = async () => {
-        try {
-            const user = auth().signOut;
-              navigation.navigate('LoginSignUp');
-          } catch (error) {
-            console.log('Error deleting account:', error.message);
-          }
+  useEffect(() => {
+    const user = auth().currentUser;
+    if (user) {
+      const [firstName = 'No First Name', lastName = 'No Last Name'] =
+        user.displayName ? user.displayName.split(' ') : [];
+      setUserProfile({
+        firstName,
+        lastName,
+        email: user.email || 'No Email Provided',
+      });
     }
+  }, []);
 
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      navigation.navigate('LoginSignUp');
+    } catch (error) {
+      console.log('Error logging out:', error.message);
+    }
+  };
+  console.log(profile);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -32,35 +48,77 @@ const Settings = () => {
           </TouchableOpacity>
           <Text style={styles.header}>Settings</Text>
         </View>
-        <View style={styles.pageWrapper}>
-            <TouchableOpacity style={styles.btnView}>
-                <View style={styles.imgText}>
-                <Image source={require('../assets/user.png')} style={styles.image}/>
-                <Text style={styles.text}>Profile</Text>
-                </View>
-                <Image source={require('../assets/down.png')} style={styles.imageDown}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnView} onPress={() => setLogout(!logout)}>
-                <View style={styles.imgText}>
-                <Image source={require('../assets/logout.png')} style={styles.image}/>
-                <Text style={styles.text}>Logout</Text>
-                </View>
-                <Image source={require('../assets/down.png')} style={styles.imageDown}/>
-            </TouchableOpacity>
-        </View>
-        {logout &&
-        <View style={styles.box}>
-            <View style={styles.boxContainer}>
-            <Text style={styles.boxHeader}>Logout</Text>
-            <Text style={styles.boxBody}>Are you sure you want to logout?</Text>
-            <TouchableOpacity style={styles.toggleBtn} onPress={handleLogout}>
-                <Text style={styles.toggleText}>Logout</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toggleBtnCancel} onPress={() => setLogout(false)}>
-                <Text style={styles.toggleTextCancel}>Cancel</Text>
-            </TouchableOpacity>
+        <ScrollView style={styles.pageWrapper}>
+          <TouchableOpacity
+            style={styles.btnView}
+            onPress={() => setProfile(!profile)}>
+            <View style={styles.imgText}>
+              <Image
+                source={require('../assets/user.png')}
+                style={styles.image}
+              />
+              <Text style={styles.text}>Profile</Text>
             </View>
-        </View>}
+            <Image
+              source={require('../assets/down.png')}
+              style={styles.imageDown}
+            />
+          </TouchableOpacity>
+          {profile && userProfile && (
+            <View style={styles.box}>
+              <View style={styles.boxContainer}>
+                <Text style={styles.boxHeader}>Profile Detail</Text>
+                <View style={styles.imgText}>
+                  <Image
+                    style={styles.image}
+                    source={require('../assets/user.png')}
+                  />
+                  <View>
+                    <Text style={styles.profile}>
+                      {userProfile?.firstName} {userProfile?.lastName}
+                    </Text>
+                    <Text style={styles.profile}>{userProfile?.email}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.btnView}
+            onPress={() => setLogout(!logout)}>
+            <View style={styles.imgText}>
+              <Image
+                source={require('../assets/logout.png')}
+                style={styles.image}
+              />
+              <Text style={styles.text}>Logout</Text>
+            </View>
+            <Image
+              source={require('../assets/down.png')}
+              style={styles.imageDown}
+            />
+          </TouchableOpacity>
+          {logout && (
+            <View style={styles.box}>
+              <View style={styles.boxContainer}>
+                <Text style={styles.boxHeader}>Logout</Text>
+                <Text style={styles.boxBody}>
+                  Are you sure you want to logout?
+                </Text>
+                <TouchableOpacity
+                  style={styles.toggleBtn}
+                  onPress={handleLogout}>
+                  <Text style={styles.toggleText}>Logout</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.toggleBtnCancel}
+                  onPress={() => setLogout(false)}>
+                  <Text style={styles.toggleTextCancel}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -127,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -168,7 +226,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 40,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
   },
   toggleText: {
     fontSize: 22,
@@ -181,6 +239,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'black',
     textAlign: 'center',
+  },
+  profile: {
+    alignItems: 'center',
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 

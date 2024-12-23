@@ -9,12 +9,14 @@ import MyOrder from '../screens/MyOrder';
 import OrderDetail from '../screens/OrderDetail';
 import LoginSignupScreen from '../screens/Login';
 import Settings from '../screens/Settings';
+import SplashScreen from '../screens/SplashScreen';
 
 const AuthStack = createStackNavigator();
 
 function AuthStackNavigator() {
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName='GetStarted'>
+    <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName='SplashScreen'>
+      <AuthStack.Screen name="SplashScreen" component={SplashScreen} />
       <AuthStack.Screen name="LoginSignUp" component={LoginSignupScreen} />
       <AuthStack.Screen name="GetStarted" component={GetStarted} />
       <AuthStack.Screen name="Home" component={Home} />

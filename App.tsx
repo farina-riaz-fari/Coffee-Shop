@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FavouritesProvider } from './src/Context/FavouritesContext';
 import messaging from '@react-native-firebase/messaging';
-import { PermissionsAndroid, View } from 'react-native';
+import { LogBox, PermissionsAndroid, View } from 'react-native';
 import { NotificationsProvider } from './src/Context/NotificationsContext';
 import Toast from 'react-native-toast-message';
 import ApplicationStack from './src/navigators';
