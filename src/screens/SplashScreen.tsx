@@ -2,15 +2,25 @@ import React, { useEffect, useRef } from "react";
 import LottieView from "lottie-react-native";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 const SplashScreen = () => {
     const animation = useRef<LottieView>(null);
     const navigation = useNavigation();
 
     useEffect(() => {
+        const checkAuthStatus = async () => {
+            const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+            if (isLoggedIn === "true") {
+                navigation.replace("GetStarted");
+            } else {
+                navigation.replace("LoginSignUp"); 
+            }
+            console.log(isLoggedIn)
+        };
         const timeout = setTimeout(() => {
-            navigation.replace("GetStarted");
-        }, 3000); 
+            checkAuthStatus();
+        }, 3000);
 
         return () => clearTimeout(timeout); 
     }, [navigation]);

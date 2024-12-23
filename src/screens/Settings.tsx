@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Settings = () => {
   const navigation = useNavigation();
@@ -34,6 +35,8 @@ const Settings = () => {
     try {
       await auth().signOut();
       navigation.navigate('LoginSignUp');
+      await AsyncStorage.setItem('isLoggedIn', 'false'); 
+
     } catch (error) {
       console.log('Error logging out:', error.message);
     }

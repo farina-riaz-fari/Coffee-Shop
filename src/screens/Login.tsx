@@ -74,6 +74,9 @@ const LoginSignupScreen = () => {
       setMessage('');
       await AsyncStorage.setItem('email', email);
       await AsyncStorage.setItem('password', password);
+      if(email || password ){
+        await AsyncStorage.setItem('isLoggedIn', 'true'); 
+      }
       navigation.navigate('GetStarted');
     } catch (error) {
       setMessage(error.message || 'Login failed. Please try again.');
