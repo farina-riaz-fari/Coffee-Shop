@@ -41,7 +41,7 @@ const Settings = () => {
       console.log('Error logging out:', error.message);
     }
   };
-  console.log(profile);
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>

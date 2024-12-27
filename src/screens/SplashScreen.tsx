@@ -16,7 +16,6 @@ const SplashScreen = () => {
             } else {
                 navigation.replace("LoginSignUp"); 
             }
-            console.log(isLoggedIn)
         };
         const timeout = setTimeout(() => {
             checkAuthStatus();
