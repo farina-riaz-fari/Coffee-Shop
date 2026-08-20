@@ -64,3 +64,16 @@ node -v
 npm -v
 java -version
 ```
+
+## Screenshots
+
+<p align="center">
+  <img src="./screenshots/coffeeShopHome.png" width="200" />
+  <img src="./screenshots/coffeeShopProductDetail.png" width="200" />
+  <img src="./screenshots/coffeeShopFavourites.png" width="200" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/coffeeShopOrderNotification.png" width="200" />
+  <img src="./screenshots/coffeeShopOrderReceipt.png" width="200" />
+</p>
