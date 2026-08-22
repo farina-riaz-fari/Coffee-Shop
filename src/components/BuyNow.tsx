@@ -7,6 +7,7 @@ import database from '@react-native-firebase/database';
 import moment from 'moment';
 import {useNotifications} from '../Context/NotificationsContext';
 import Toast from 'react-native-toast-message';
+import auth from '@react-native-firebase/auth';
 
 interface BuyNowProps {
   openModal: boolean;
@@ -45,7 +46,11 @@ const BuyNow: React.FC<BuyNowProps> = ({
   const total = parseFloat(totalPrice * quantity) + parseFloat(deliveryCharges);
   const handlePayment = async () => {
     try {
-      const newOrder = database().ref('coffeeShopDatabase/uuid').push();
+      const user = auth().currentUser;
+      if (!user) {
+        throw new Error('User is not logged in');
+      }
+      const newOrder = database().ref(`coffeeShopDatabase/orders/${user.uid}`).push();
       const getSizeLabel = () => {
         switch (selectedType?.size) {
           case 'S':

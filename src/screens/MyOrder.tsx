@@ -11,6 +11,7 @@ import {
 import BottomTab from '../components/BottomTabs';
 import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 const MyOrder = () => {
   const navigation = useNavigation();
@@ -22,19 +23,28 @@ const MyOrder = () => {
   }, []);
 
   const getDatabase = async () => {
-    try {
-      const getData = await database()
-        .ref('coffeeShopDatabase/uuid')
-        .once('value');
-      const data = getData.val();
+  try {
+    const user = auth().currentUser;
 
-      let dataArray = [];
+    if (!user) {
+      setOrderList([]);
+      return;
+    }
+
+    const getData = await database()
+      .ref(`coffeeShopDatabase/orders/${user.uid}`)
+      .once('value');
+
+    const data = getData.val();
+
+    let dataArray = [];
 
       if (data) {
         dataArray = Object.entries(data).map(([key, value]) => ({
           ...value,
           id: key,
         }));
+
         setOrderList(dataArray);
       } else {
         setOrderList([]);

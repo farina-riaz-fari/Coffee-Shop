@@ -10,6 +10,7 @@ import OrderDetail from '../screens/OrderDetail';
 import LoginSignupScreen from '../screens/Login';
 import Settings from '../screens/Settings';
 import SplashScreen from '../screens/SplashScreen';
+import Products from '../screens/Products';
 
 const AuthStack = createStackNavigator();
 
@@ -20,6 +21,7 @@ function AuthStackNavigator() {
       <AuthStack.Screen name="LoginSignUp" component={LoginSignupScreen} />
       <AuthStack.Screen name="GetStarted" component={GetStarted} />
       <AuthStack.Screen name="Home" component={Home} />
+      <AuthStack.Screen name="Products" component={Products} />
       <AuthStack.Screen name="DetailScreen" component={DetailScreen} />
       <AuthStack.Screen name="Favourites" component={Favourites} />
       <AuthStack.Screen name="Notifications" component={Notifications} />

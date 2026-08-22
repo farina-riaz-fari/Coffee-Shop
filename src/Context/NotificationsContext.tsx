@@ -1,31 +1,83 @@
-import React, {createContext, useState, useContext, useEffect} from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 
-const NotificationsContext = createContext();
+interface Notification {
+  [key: string]: any;
+}
 
-export const NotificationsProvider = ({children}) => {
-  const [notifications, setNotifications] = useState([]);
+interface NotificationsContextType {
+  notifications: Notification[];
+  addNotification: (notification: Notification) => Promise<void>;
+}
+
+const NotificationsContext = createContext<
+  NotificationsContextType | undefined
+>(undefined);
+
+interface NotificationsProviderProps {
+  children: ReactNode;
+}
+
+export const NotificationsProvider = ({
+  children,
+}: NotificationsProviderProps) => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    const loadNotifications = async () => {
+    const unsubscribe = auth().onAuthStateChanged(async user => {
       try {
-        const storedNotifications = await AsyncStorage.getItem('notifications');
+        if (!user) {
+          setNotifications([]);
+          return;
+        }
+
+        const storageKey = `notifications_${user.uid}`;
+
+        const storedNotifications =
+          await AsyncStorage.getItem(storageKey);
+
         if (storedNotifications) {
           setNotifications(JSON.parse(storedNotifications));
+        } else {
+          setNotifications([]);
         }
       } catch (error) {
         console.error('Failed to load notifications:', error);
+        setNotifications([]);
       }
-    };
-    loadNotifications();
+    });
+
+    return unsubscribe;
   }, []);
 
-  const addNotification = async notification => {
+  const addNotification = async (
+    notification: Notification,
+  ) => {
+    const user = auth().currentUser;
+
+    if (!user) {
+      return;
+    }
+
     try {
-      const updatedNotifications = [notification, ...notifications];
+      const updatedNotifications = [
+        notification,
+        ...notifications,
+      ];
+
       setNotifications(updatedNotifications);
+
+      const storageKey = `notifications_${user.uid}`;
+
       await AsyncStorage.setItem(
-        'notifications',
+        storageKey,
         JSON.stringify(updatedNotifications),
       );
     } catch (error) {
@@ -54,4 +106,14 @@ export const NotificationsProvider = ({children}) => {
   );
 };
 
-export const useNotifications = () => useContext(NotificationsContext);
+export const useNotifications = () => {
+  const context = useContext(NotificationsContext);
+
+  if (!context) {
+    throw new Error(
+      'useNotifications must be used inside NotificationsProvider',
+    );
+  }
+
+  return context;
+};

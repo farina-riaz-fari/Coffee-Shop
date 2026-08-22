@@ -1,27 +1,72 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 
-const FavouritesContext = createContext();
+interface FavouriteItem {
+  id: string | number;
+  [key: string]: any;
+}
 
-export const FavouritesProvider = ({children}) => {
-  const [favourites, setFavourites] = useState([]);
+interface FavouritesContextType {
+  favourites: FavouriteItem[];
+  toggleFavourite: (item: FavouriteItem) => Promise<void>;
+}
+
+const FavouritesContext = createContext<FavouritesContextType | undefined>(
+  undefined,
+);
+
+interface FavouritesProviderProps {
+  children: ReactNode;
+}
+
+export const FavouritesProvider = ({
+  children,
+}: FavouritesProviderProps) => {
+  const [favourites, setFavourites] = useState<FavouriteItem[]>([]);
 
   useEffect(() => {
-    const loadFavourites = async () => {
+    const unsubscribe = auth().onAuthStateChanged(async user => {
       try {
-        const storedFavourites = await AsyncStorage.getItem('favourites');
+        if (!user) {
+          setFavourites([]);
+          return;
+        }
+
+        const storageKey = `favourites_${user.uid}`;
+        const storedFavourites = await AsyncStorage.getItem(storageKey);
+
         if (storedFavourites) {
           setFavourites(JSON.parse(storedFavourites));
+        } else {
+          setFavourites([]);
         }
       } catch (error) {
         console.error('Failed to load favourites:', error);
+        setFavourites([]);
       }
-    };
-    loadFavourites();
+    });
+
+    return unsubscribe;
   }, []);
 
-  const toggleFavourite = async item => {
-    const isFavourite = favourites.some(fav => fav.id === item.id);
+  const toggleFavourite = async (item: FavouriteItem) => {
+    const user = auth().currentUser;
+
+    if (!user) {
+      return;
+    }
+
+    const isFavourite = favourites.some(
+      fav => fav.id === item.id,
+    );
+
     const updatedFavourites = isFavourite
       ? favourites.filter(fav => fav.id !== item.id)
       : [...favourites, item];
@@ -29,8 +74,10 @@ export const FavouritesProvider = ({children}) => {
     setFavourites(updatedFavourites);
 
     try {
+      const storageKey = `favourites_${user.uid}`;
+
       await AsyncStorage.setItem(
-        'favourites',
+        storageKey,
         JSON.stringify(updatedFavourites),
       );
     } catch (error) {
@@ -39,10 +86,21 @@ export const FavouritesProvider = ({children}) => {
   };
 
   return (
-    <FavouritesContext.Provider value={{favourites, toggleFavourite}}>
+    <FavouritesContext.Provider
+      value={{favourites, toggleFavourite}}>
       {children}
     </FavouritesContext.Provider>
   );
 };
 
-export const useFavourites = () => useContext(FavouritesContext);
+export const useFavourites = () => {
+  const context = useContext(FavouritesContext);
+
+  if (!context) {
+    throw new Error(
+      'useFavourites must be used inside FavouritesProvider',
+    );
+  }
+
+  return context;
+};
