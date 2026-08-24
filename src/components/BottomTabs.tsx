@@ -1,10 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  type NavigationProp,
+} from '@react-navigation/native';
 import {BottomTabsData} from '../Data';
 
+type BottomTabParamList = {
+  Home: undefined;
+  Favourites: undefined;
+  MyOrder: undefined;
+  Notifications: undefined;
+};
+
 const BottomTab = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<BottomTabParamList>>();
   const route = useRoute();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -21,7 +32,7 @@ const BottomTab = () => {
         <TouchableOpacity
           key={index}
           onPress={() => {
-            navigation.navigate(item.route);
+            navigation.navigate(item.route as keyof BottomTabParamList);
             setActiveTab(index);
           }}>
           <Image

@@ -23,6 +23,11 @@ interface BuyNowProps {
   name: string;
 }
 
+interface NotificationData {
+  title: string;
+  body: string;
+}
+
 const BuyNow: React.FC<BuyNowProps> = ({
   openModal,
   setOpenModal,
@@ -32,7 +37,6 @@ const BuyNow: React.FC<BuyNowProps> = ({
   name,
 }) => {
   const [quantity, setQuantity] = useState(1);
-  const [productDetail, setProductDetail] = useState(null);
   const handleQuantityIncrement = () => {
     setQuantity(quantity + 1);
   };
@@ -42,8 +46,8 @@ const BuyNow: React.FC<BuyNowProps> = ({
   const {addNotification} = useNotifications();
 
   const deliveryCharges =
-    selectedType.bike === 'Pick Up' ? (0.0).toFixed(2) : (0.5).toFixed(2);
-  const total = parseFloat(totalPrice * quantity) + parseFloat(deliveryCharges);
+  selectedType.bike === 'Pick Up' ? (0.0).toFixed(2) : (0.5).toFixed(2);
+  const total = (totalPrice ?? 0) * quantity + parseFloat(deliveryCharges);
   const handlePayment = async () => {
     try {
       const user = auth().currentUser;
@@ -93,7 +97,7 @@ const BuyNow: React.FC<BuyNowProps> = ({
     });
   };
 
-  const onDisplayNotification = async ({title, body}) => {
+  const onDisplayNotification = async ({title, body}: NotificationData) => {
     try {
       const settings = await notifee.requestPermission();
       if (settings.authorizationStatus === 1) {

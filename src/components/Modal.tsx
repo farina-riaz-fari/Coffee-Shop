@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
+  DimensionValue,
   Image,
   Modal as RNModal,
   SafeAreaView,
@@ -10,6 +11,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
+type SelectedTypeKey = 'bike' | 'coffee' | 'sugar';
 
 interface ModalProps {
   visible: boolean;
@@ -24,7 +27,7 @@ interface ModalProps {
   setSelectedType: React.Dispatch<React.SetStateAction<any>>;
   showTitle?: boolean;
   modalPosition?: StyleProp<ViewStyle>;
-  modalWidth?: string | number;
+  modalWidth?: DimensionValue;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -38,14 +41,14 @@ const Modal: React.FC<ModalProps> = ({
   modalPosition,
   modalWidth = '80%',
 }) => {
-  const renderButton = (title: string, label: string) => (
+  const renderButton = (title: SelectedTypeKey, label: string) => (
     <TouchableOpacity
       style={[
         styles.buttonStyle,
         selectedType[title] === label && styles.selectedButton,
       ]}
       onPress={() =>
-        setSelectedType(prev => ({
+        setSelectedType((prev: any) => ({
           ...prev,
           [title]: label,
         }))

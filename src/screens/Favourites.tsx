@@ -11,9 +11,15 @@ import {
 import BottomTab from '../components/BottomTabs';
 import {useFavourites} from '../Context/FavouritesContext';
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type FavouritesNavigationProp = StackNavigationProp<{
+  DetailScreen: {item: any};
+  Favourites: undefined;
+}>;
 
 const Favourites = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<FavouritesNavigationProp>();
   const {favourites} = useFavourites();
 
   const renderItem = ({item}: any) => (

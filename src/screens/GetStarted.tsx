@@ -1,9 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
+type NavigationProp = StackNavigationProp<{
+  Home: undefined;
+}>;
+
 const GetStarted = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   return (
     <View style={styles.container}>
       <Image
