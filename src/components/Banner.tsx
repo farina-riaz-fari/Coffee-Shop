@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import type {NavigationProp} from '@react-navigation/native';
 
 interface BannerProps {
   searchQuery: string;
@@ -15,7 +16,7 @@ interface BannerProps {
 }
 
 const Banner: React.FC<BannerProps> = ({ searchQuery, setSearchQuery }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   return (
     <View style={styles.container}>

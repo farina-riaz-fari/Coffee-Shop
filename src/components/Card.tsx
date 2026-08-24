@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import type {NavigationProp} from '@react-navigation/native';
 import {
   FlatList,
   Image,
@@ -16,7 +17,7 @@ interface CardProps {
   searchQuery?: any;
 }
 const Card: React.FC<CardProps> = ({activeTab, categories, searchQuery}) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const cardData = CardsData;
 
   const filteredData = cardData.filter(item => {
