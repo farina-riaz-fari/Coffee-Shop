@@ -2,11 +2,21 @@ import React, { useEffect, useRef } from "react";
 import LottieView from "lottie-react-native";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
+
+type RootStackParamList = {
+    LoginSignUp: undefined;
+    GetStarted: undefined;
+    Home: undefined;
+    OrderDetail: {item: any};
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const SplashScreen = () => {
     const animation = useRef<LottieView>(null);
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp>();
 
     useEffect(() => {
         const checkAuthStatus = async () => {

@@ -9,14 +9,30 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+type RootStackParamList = {
+  LoginSignUp: undefined;
+  GetStarted: undefined;
+  Home: undefined;
+  OrderDetail: {item: any};
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
+
+type UserProfile = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
 const Settings = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const [profile, setProfile] = useState(false);
   const [logout, setLogout] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const user = auth().currentUser;
@@ -38,8 +54,10 @@ const Settings = () => {
       await AsyncStorage.setItem('isLoggedIn', 'false'); 
 
     } catch (error) {
+    if (error instanceof Error) {
       console.log('Error logging out:', error.message);
     }
+  }
   };
   
   return (

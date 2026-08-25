@@ -1,4 +1,5 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {
   Image,
@@ -14,9 +15,26 @@ import BuyNow from '../components/BuyNow';
 import {useFavourites} from '../Context/FavouritesContext';
 import ImageSlider from 'react-native-image-slider';
 
+type RootStackParamList = {
+  Detail: {item: any};
+};
+
+type DetailRoute = {
+  key: string;
+  name: 'Detail';
+  params: {
+    item: any;
+  };
+};
+
+type IconItem = {
+  title: string;
+  image: any;
+};
+
 const DetailScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const route = useRoute<DetailRoute>();
   const {item} = route.params || {};
   const [onShowMore, setOnShowMore] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -32,7 +50,7 @@ const DetailScreen = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [openBuyNowModal, setOpenBuyNowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<IconItem | null>(null);
   const icons = Icons;
   const sizes = ['S', 'M', 'L'];
   const getPrice = () => {
@@ -45,14 +63,14 @@ const DetailScreen = () => {
     }
   };
   const totalPrice = getPrice();
-  const handleSizeSelection = index => {
+  const handleSizeSelection = (index: number) => {
     setActiveTab(index);
     setSelectedType(prev => ({
       ...prev,
       size: sizes[index],
     }));
   };
-  const handleIconPress = image => {
+  const handleIconPress = (image: IconItem) => {
     setSelectedImage(image);
     setOpenModal(true);
   };

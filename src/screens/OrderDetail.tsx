@@ -1,4 +1,5 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {
   Image,
   SafeAreaView,
@@ -8,8 +9,14 @@ import {
   View,
 } from 'react-native';
 
+type OrderDetailParams = {
+  OrderDetail: {
+    item: any;
+  };
+};
+
 const OrderDetail = () => {
-  const route = useRoute();
+  const route = useRoute<RouteProp<OrderDetailParams, 'OrderDetail'>>();
   const {item} = route.params || {};
   const navigation = useNavigation();
 
