@@ -14,6 +14,11 @@ import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type NavigationProp = StackNavigationProp<{
+  GetStarted: undefined;
+}>;
 
 const LoginSignupScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,7 +29,7 @@ const LoginSignupScreen = () => {
   const [lastName, setLastName] = useState('');
   const [message, setMessage] = useState('');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const sliderAnimation = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
@@ -79,8 +84,12 @@ const LoginSignupScreen = () => {
       }
       navigation.navigate('GetStarted');
     } catch (error) {
-      setMessage(error.message || 'Login failed. Please try again.');
-    }
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : 'Login failed. Please try again.',
+    );
+  }
   };
 
   const handleSignUp = async () => {
@@ -111,7 +120,11 @@ const LoginSignupScreen = () => {
       setLastName('');
       toggleForm();
     } catch (error) {
-      setMessage(error.message || 'Signup failed. Please try again.');
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : 'Signup failed. Please try again.',
+    );
     }
   };
 

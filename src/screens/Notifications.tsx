@@ -14,7 +14,7 @@ const Notifications = () => {
   const {notifications} = useNotifications();
   // const {notifications, removeNotification} = useNotifications();
 
-  const renderNotification = ({item}) => (
+  const renderNotification = ({item}: any) => (
     <View style={styles.notificationCard}>
       <View style={styles.headerView}>
         <View>

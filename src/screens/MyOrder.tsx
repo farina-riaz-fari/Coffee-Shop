@@ -12,10 +12,30 @@ import BottomTab from '../components/BottomTabs';
 import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type NavigationProp = StackNavigationProp<{
+  OrderDetail: {item: Order};
+}>;
+
+interface Order {
+  id: string;
+  deliveryMethod?: string;
+  coffeeType?: string;
+  sugarPreference?: string;
+  size?: string;
+  quantity?: number;
+  basePrice?: number;
+  deliveryCharges?: string;
+  total?: string;
+  timestamp?: string;
+  image: any;
+  name: string;
+}
 
 const MyOrder = () => {
-  const navigation = useNavigation();
-  const [orderList, setOrderList] = useState(null);
+  const navigation = useNavigation<NavigationProp>();
+  const [orderList, setOrderList] = useState<Order[]>([]);
   const [toggleView, setToggleView] = useState(true);
 
   useEffect(() => {
@@ -37,13 +57,13 @@ const MyOrder = () => {
 
     const data = getData.val();
 
-    let dataArray = [];
+    let dataArray: Order[] = [];
 
       if (data) {
         dataArray = Object.entries(data).map(([key, value]) => ({
-          ...value,
-          id: key,
-        }));
+        ...(value as Omit<Order, 'id'>),
+        id: key,
+      }));
 
         setOrderList(dataArray);
       } else {
